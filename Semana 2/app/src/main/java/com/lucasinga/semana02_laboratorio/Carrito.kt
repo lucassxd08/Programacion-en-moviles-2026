@@ -102,3 +102,27 @@ class Tienda(private val carrito: CarritoDeCompras) : Reportable {
         println(String.format("%-22s: S/ %8.2f", "Total con descuento", totalConDescuento))
     }
 }
+
+fun main() {
+    println("=========================================")
+    println("   CARRITO DE COMPRAS - TIENDA TECSUP")
+    println("=========================================")
+
+    val carrito = CarritoDeCompras("Lucas Inga")
+    println("Cliente: ${carrito.nombreCliente}")
+    println()
+
+    carrito.agregar(ProductoElectronico("Audifonos Samsung", 180.0, 1, 12))
+    carrito.agregar(ProductoElectronico("Monitor", 800.0, 1, 24))
+    carrito.agregar(ProductoElectronico("Celular", 1200.0, 1, 12))
+    carrito.agregar(ProductoAccesorio("Disco Duro", 250.0, 2, "Metalico"))
+
+    println()
+
+    val tienda = Tienda(carrito)
+    tienda.mostrarDetalle()
+    tienda.mostrarResumen()
+
+    println()
+    println("Gracias por su compra, ${carrito.nombreCliente}!")
+}
