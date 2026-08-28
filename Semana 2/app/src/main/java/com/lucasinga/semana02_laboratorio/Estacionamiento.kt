@@ -41,6 +41,26 @@ fun calcularImporte(tipo: String, horas: Int, esFrecuente: Boolean): Double {
     return subtotal - descuento
 }
 
+fun mostrarReporte(vehiculos: List<Vehiculo>) {
+    println()
+    println("Reporte del dia")
+    println("Placa       Tipo        Horas  Tarifa  Recargo  Importe")
+    println("----------------------------------------------------------")
+
+    var totalRecaudado = 0.0
+
+    for (v in vehiculos) {
+        val tarifa = tarifaBase(v.tipo)
+        val recargoPct = calcularRecargoPorcentaje(v.horas)
+        val importe = calcularImporte(v.tipo, v.horas, v.esFrecuente)
+        totalRecaudado += importe
+
+        println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe")
+    }
+
+    println("Total recaudado:: S/ $totalRecaudado")
+}
+
 fun main() {
     println("Sistema de Estacionamiento")
     println()
@@ -76,4 +96,5 @@ fun main() {
 
         vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
     }
+    mostrarReporte(vehiculos)
 }
