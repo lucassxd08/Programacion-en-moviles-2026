@@ -12,3 +12,21 @@ abstract class ProductoBase(
     override fun toString(): String =
         "$nombre (${categoria()}) - S/ $precio x$cantidad"
 }
+
+class ProductoElectronico(
+    nombre: String,
+    precio: Double,
+    cantidad: Int,
+    val garantiaMeses: Int
+) : ProductoBase(nombre, precio, cantidad) {
+    override fun categoria(): String = "Electronico"
+}
+
+class ProductoAccesorio(
+    nombre: String,
+    precio: Double,
+    cantidad: Int,
+    val material: String
+) : ProductoBase(nombre, precio, cantidad) {
+    override fun categoria(): String = "Accesorio"
+}
