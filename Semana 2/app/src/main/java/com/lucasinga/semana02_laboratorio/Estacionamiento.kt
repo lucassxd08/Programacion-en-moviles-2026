@@ -7,6 +7,40 @@ data class Vehiculo(
     val esFrecuente: Boolean
 )
 
+fun tarifaBase(tipo: String): Double {
+    return when (tipo) {
+        "moto" -> 2.0
+        "auto" -> 4.0
+        "camioneta" -> 10.0
+        else -> 0.0
+    }
+}
+
+fun calcularRecargoPorcentaje(horas: Int): Int {
+    return when {
+        horas <= 2 -> 0
+        horas <= 3 -> 20
+        horas <= 5 -> 0
+        else -> 50
+    }
+}
+
+fun calcularImporte(tipo: String, horas: Int, esFrecuente: Boolean): Double {
+    val tarifa = tarifaBase(tipo)
+    val importeNormal = tarifa * horas
+
+    val recargo = when {
+        horas <= 2 -> 0.0
+        horas <= 3 -> importeNormal * 0.20
+        horas <= 5 -> 0.0
+        else -> (horas - 5) * tarifa * 0.50
+    }
+
+    val subtotal = importeNormal + recargo
+    val descuento = if (esFrecuente) subtotal * 0.10 else 0.0
+    return subtotal - descuento
+}
+
 fun main() {
     println("Sistema de Estacionamiento")
     println()
