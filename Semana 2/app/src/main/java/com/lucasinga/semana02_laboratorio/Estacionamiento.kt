@@ -1,0 +1,45 @@
+package com.lucasinga.semana02_laboratorio
+
+data class Vehiculo(
+    val placa: String,
+    val tipo: String,
+    val horas: Int,
+    val esFrecuente: Boolean
+)
+
+fun main() {
+    println("Sistema de Estacionamiento")
+    println()
+    println("Tarifas base:")
+    println("  Moto:      S/ 2 por hora")
+    println("  Auto:      S/ 4 por hora")
+    println("  Camioneta: S/ 10 por hora")
+    println()
+
+    print("Cuantos vehiculos va a procesar? ")
+    val cantidad = readLine()?.toIntOrNull() ?: 0
+
+    val vehiculos = mutableListOf<Vehiculo>()
+
+    for (i in 1..cantidad) {
+        println()
+        println("--- Vehiculo $i ---")
+        print("Placa: ")
+        val placa = readLine() ?: "SIN-PLACA"
+
+        print("Tipo (moto / auto / camioneta): ")
+        val tipo = readLine()?.lowercase() ?: "auto"
+
+        print("Horas de permanencia (minimo 1): ")
+        var horas = readLine()?.toIntOrNull() ?: 1
+        if (horas < 1) {
+            println("Minimo 1 hora. Se registra 1 hora.")
+            horas = 1
+        }
+
+        print("Es cliente frecuente? (s/n): ")
+        val esFrecuente = readLine()?.lowercase() == "s"
+
+        vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
+    }
+}
