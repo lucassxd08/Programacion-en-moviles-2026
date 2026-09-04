@@ -52,7 +52,8 @@ fun mostrarReporte(vehiculos: List<Vehiculo>) {
         val recargoPct = calcularRecargoPorcentaje(v.horas)
         val importe = calcularImporte(v.tipo, v.horas, v.esFrecuente)
         totalRecaudado += importe
-        println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe")
+        val frecuenteTag = if (v.esFrecuente) " [Frecuente]" else ""
+        println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe$frecuenteTag")
     }
 
     println("Subtotal: S/ $totalRecaudado")
@@ -85,6 +86,7 @@ fun main() {
     val aforo = readLine()?.toIntOrNull() ?: 0
 
     val vehiculos = mutableListOf<Vehiculo>()
+    val visitasPorPlaca = mutableMapOf<String, Int>()
     var contador = 0
 
     while (true) {
@@ -110,15 +112,25 @@ fun main() {
                     print("Tipo (moto / auto / camioneta / trailer): ")
                     val tipo = readLine()?.lowercase() ?: "auto"
 
-                    print("Horas de permanencia (minimo 1): ")
+                    print("Horas de permanencia (minimo 1, maximo 24): ")
                     var horas = readLine()?.toIntOrNull() ?: 1
                     if (horas < 1) {
                         println("Minimo 1 hora. Se registra 1 hora.")
                         horas = 1
+                    } else if (horas > 24) {
+                        println("Maximo 24 horas. Se registra 24 horas.")
+                        horas = 24
                     }
 
-                    print("Es cliente frecuente? (s/n): ")
-                    val esFrecuente = readLine()?.lowercase() == "s"
+                    val visitas = (visitasPorPlaca[placa] ?: 0) + 1
+                    visitasPorPlaca[placa] = visitas
+                    val esFrecuente = visitas >= 3
+
+                    if (esFrecuente) {
+                        println("Cliente frecuente detectado ($visitas visitas). Descuento del 10% aplicado.")
+                    } else {
+                        println("Visitas registradas para esta placa: $visitas de 3 para descuento frecuente.")
+                    }
 
                     vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
                     contador++
