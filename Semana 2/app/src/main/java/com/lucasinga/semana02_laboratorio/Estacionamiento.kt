@@ -43,7 +43,7 @@ fun calcularImporte(tipo: String, horas: Int, esFrecuente: Boolean): Double {
 
 fun mostrarReporte(vehiculos: List<Vehiculo>) {
     println()
-    println("Reporte del dia")
+    println("Resumen")
     println("Placa       Tipo        Horas  Tarifa  Recargo  Importe")
     println("----------------------------------------------------------")
 
@@ -58,7 +58,7 @@ fun mostrarReporte(vehiculos: List<Vehiculo>) {
         println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe")
     }
 
-    println("Total recaudado:: S/ $totalRecaudado")
+    println("Total: S/ $totalRecaudado")
 }
 
 fun main() {
