@@ -27,8 +27,7 @@ fun mostrarDetalle(productos: List<Producto>) {
     var i = 1
     for (p in productos) {
         val importe = p.precio * p.cantidad
-        println(String.format("%d. %-20s x%d  S/ %8.2f", i, p.nombre, p.cantidad, importe))
-        i++
+        println("$i. ${p.nombre} x${p.cantidad}  S/ $importe")
     }
 }
 
@@ -43,15 +42,25 @@ fun calcularDescuento(total: Double): Double {
 fun main() {
     println("Carrito de compras - Tienda Tecsup")
 
-    val nombreCliente = "Lucas Inga"
+    print("Ingrese su nombre: ")
+    val nombreCliente = readLine() ?: "Cliente"
     val carrito = mutableListOf<Producto>()
     println("Cliente: $nombreCliente")
     println()
 
-    carrito.add(Producto("Audifonos Samsung", 180.0, 1))
-    carrito.add(Producto("Monitor", 800.0, 1))
-    carrito.add(Producto("Celular", 1200.0, 1))
-    carrito.add(Producto("Disco Duro", 250.0, 2))
+    print("Cuantos productos desea agregar? ")
+    val cantidadProductos = readLine()?.toIntOrNull() ?: 0
+
+    for (i in 1..cantidadProductos) {
+        println("Producto $i")
+        print("Nombre: ")
+        val nombre = readLine() ?: "Producto $i"
+        print("Precio: ")
+        val precio = readLine()?.toDoubleOrNull() ?: 0.0
+        print("Cantidad: ")
+        val cant = readLine()?.toIntOrNull() ?: 1
+        carrito.add(Producto(nombre, precio, cant))
+    }
 
     for (producto in carrito) {
         println("Producto agregado: ${producto.nombre}")
@@ -62,17 +71,16 @@ fun main() {
     val igv = calcularIGV(subtotal)
     val total = calcularTotal(subtotal, igv)
 
-    println(String.format("%-22s: %d", "Cantidad de productos", carrito.size))
-    println(String.format("%-22s: S/ %8.2f", "Subtotal", subtotal))
-    println(String.format("%-22s: S/ %8.2f", "IGV (18%)", igv))
-    println(String.format("%-22s: S/ %8.2f", "Total a pagar", total))
+    println("Cantidad de productos: ${carrito.size}")
+    println("Subtotal: $subtotal")
+    println("IGV (18%): $igv")
+    println("Total a pagar: $total")
 
     mostrarDetalle(carrito)
 
     val masCaro = carrito.maxByOrNull { it.precio }
     if (masCaro != null) {
-        println("Producto mas caro: ${masCaro.nombre} " +
-                String.format("(S/ %.2f)", masCaro.precio))
+        println("Producto mas caro: ${masCaro.nombre} (S/ ${masCaro.precio})")
     }
 
     val descuento = calcularDescuento(total)
@@ -82,7 +90,6 @@ fun main() {
     }
 
     val totalConDescuento = total - descuento
-    println(String.format("%-22s: S/ %8.2f", "Total con descuento", totalConDescuento))
-    println()
+    println("Total con descuento, totalConDescuento")
     println("Gracias por su compra, $nombreCliente!")
 }
