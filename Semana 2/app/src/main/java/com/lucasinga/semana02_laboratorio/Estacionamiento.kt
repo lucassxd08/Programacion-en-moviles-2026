@@ -79,17 +79,20 @@ fun main() {
     println("  Moto:      S/ 2 por hora")
     println("  Auto:      S/ 4 por hora")
     println("  Camioneta: S/ 10 por hora")
-    println("  Trailer: S/ 20 por hora")
+    println("  Trailer:   S/ 20 por hora")
     println()
 
-    print("Cuantos vehiculos va a procesar? ")
-    val cantidad = readLine()?.toIntOrNull() ?: 0
+    print("Ingrese el aforo del estacionamiento: ")
+    val aforo = readLine()?.toIntOrNull() ?: 0
 
     val vehiculos = mutableListOf<Vehiculo>()
+    var contador = 0
 
-    for (i in 1..cantidad) {
+    while (contador < aforo) {
         println()
-        println("--- Vehiculo $i ---")
+        println("--- Vehiculo ${contador + 1} de $aforo ---")
+        println("Espacios disponibles: ${aforo - contador}")
+
         print("Placa: ")
         val placa = readLine() ?: "SIN-PLACA"
 
@@ -107,6 +110,21 @@ fun main() {
         val esFrecuente = readLine()?.lowercase() == "s"
 
         vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
+        contador++
+
+        if (contador < aforo) {
+            print("Registrar otro vehiculo? (s/n): ")
+            val continuar = readLine()?.lowercase()
+            if (continuar != "s") break
+        }
+    }
+
+    if (contador == aforo) {
+        println()
+        println("Aforo completo ($aforo/$aforo). No se pueden registrar mas vehiculos.")
+    } else {
+        println()
+        println("Registro finalizado. Vehiculos registrados: $contador de $aforo")
     }
     mostrarReporte(vehiculos)
 }
