@@ -52,7 +52,6 @@ fun mostrarReporte(vehiculos: List<Vehiculo>) {
         val recargoPct = calcularRecargoPorcentaje(v.horas)
         val importe = calcularImporte(v.tipo, v.horas, v.esFrecuente)
         totalRecaudado += importe
-
         println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe")
     }
 
@@ -88,43 +87,60 @@ fun main() {
     val vehiculos = mutableListOf<Vehiculo>()
     var contador = 0
 
-    while (contador < aforo) {
+    while (true) {
         println()
-        println("--- Vehiculo ${contador + 1} de $aforo ---")
-        println("Espacios disponibles: ${aforo - contador}")
+        println("=== MENU ===")
+        println("1. Registrar vehiculo ($contador/$aforo espacios ocupados)")
+        println("2. Ver reporte")
+        println("3. Salir")
+        print("Seleccione una opcion: ")
 
-        print("Placa: ")
-        val placa = readLine() ?: "SIN-PLACA"
+        when (readLine()?.trim()) {
+            "1" -> {
+                if (contador >= aforo) {
+                    println("Aforo completo. No se pueden registrar mas vehiculos.")
+                } else {
+                    println()
+                    println("--- Vehiculo ${contador + 1} de $aforo ---")
+                    println("Espacios disponibles: ${aforo - contador}")
 
-        print("Tipo (moto / auto / camioneta / trailer): ")
-        val tipo = readLine()?.lowercase() ?: "auto"
+                    print("Placa: ")
+                    val placa = readLine() ?: "SIN-PLACA"
 
-        print("Horas de permanencia (minimo 1): ")
-        var horas = readLine()?.toIntOrNull() ?: 1
-        if (horas < 1) {
-            println("Minimo 1 hora. Se registra 1 hora.")
-            horas = 1
-        }
+                    print("Tipo (moto / auto / camioneta / trailer): ")
+                    val tipo = readLine()?.lowercase() ?: "auto"
 
-        print("Es cliente frecuente? (s/n): ")
-        val esFrecuente = readLine()?.lowercase() == "s"
+                    print("Horas de permanencia (minimo 1): ")
+                    var horas = readLine()?.toIntOrNull() ?: 1
+                    if (horas < 1) {
+                        println("Minimo 1 hora. Se registra 1 hora.")
+                        horas = 1
+                    }
 
-        vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
-        contador++
+                    print("Es cliente frecuente? (s/n): ")
+                    val esFrecuente = readLine()?.lowercase() == "s"
 
-        if (contador < aforo) {
-            print("Registrar otro vehiculo? (s/n): ")
-            val continuar = readLine()?.lowercase()
-            if (continuar != "s") break
+                    vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
+                    contador++
+                    println("Vehiculo registrado correctamente.")
+
+                    if (contador == aforo) {
+                        println("Aforo completo ($aforo/$aforo). No se pueden registrar mas vehiculos.")
+                    }
+                }
+            }
+            "2" -> {
+                if (vehiculos.isEmpty()) {
+                    println("No hay vehiculos registrados aun.")
+                } else {
+                    mostrarReporte(vehiculos)
+                }
+            }
+            "3" -> {
+                println("Cerrando sistema. Vehiculos registrados: $contador de $aforo")
+                break
+            }
+            else -> println("Opcion invalida. Intente de nuevo.")
         }
     }
-
-    if (contador == aforo) {
-        println()
-        println("Aforo completo ($aforo/$aforo). No se pueden registrar mas vehiculos.")
-    } else {
-        println()
-        println("Registro finalizado. Vehiculos registrados: $contador de $aforo")
-    }
-    mostrarReporte(vehiculos)
 }
