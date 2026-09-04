@@ -12,6 +12,7 @@ fun tarifaBase(tipo: String): Double {
         "moto" -> 2.0
         "auto" -> 4.0
         "camioneta" -> 10.0
+        "trailer" -> 20.0
         else -> 0.0
     }
 }
@@ -68,6 +69,7 @@ fun main() {
     println("  Moto:      S/ 2 por hora")
     println("  Auto:      S/ 4 por hora")
     println("  Camioneta: S/ 10 por hora")
+    println("  Trailer: S/ 20 por hora")
     println()
 
     print("Cuantos vehiculos va a procesar? ")
@@ -81,7 +83,7 @@ fun main() {
         print("Placa: ")
         val placa = readLine() ?: "SIN-PLACA"
 
-        print("Tipo (moto / auto / camioneta): ")
+        print("Tipo (moto / auto / camioneta / trailer): ")
         val tipo = readLine()?.lowercase() ?: "auto"
 
         print("Horas de permanencia (minimo 1): ")
