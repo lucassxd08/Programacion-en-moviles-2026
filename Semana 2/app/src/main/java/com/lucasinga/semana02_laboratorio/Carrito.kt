@@ -28,6 +28,7 @@ fun mostrarDetalle(productos: List<Producto>) {
     for (p in productos) {
         val importe = p.precio * p.cantidad
         println("$i. ${p.nombre} x${p.cantidad}  S/ $importe")
+        i++
     }
 }
 
@@ -90,6 +91,6 @@ fun main() {
     }
 
     val totalConDescuento = total - descuento
-    println("Total con descuento, totalConDescuento")
+    println("Total con descuento, $totalConDescuento")
     println("Gracias por su compra, $nombreCliente!")
 }
