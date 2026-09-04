@@ -4,7 +4,6 @@ data class Vehiculo(
     val placa: String,
     val tipo: String,
     val horas: Int,
-    val esFrecuente: Boolean
 )
 
 fun tarifaBase(tipo: String): Double {
@@ -26,17 +25,15 @@ fun calcularRecargoPorcentaje(horas: Int): Int {
     }
 }
 
-fun calcularImporte(tipo: String, horas: Int, esFrecuente: Boolean): Double {
+fun calcularImporte(tipo: String, horas: Int): Double {
     val tarifa = tarifaBase(tipo)
     val importeNormal = tarifa * horas
-    val importeConRecargo = when {
+    return when {
         horas <= 2 -> importeNormal
         horas <= 5 -> importeNormal * 1.20
         horas <= 10 -> importeNormal * 1.40
         else -> importeNormal * 1.50
     }
-    val descuentoFrecuente = if (esFrecuente) importeConRecargo * 0.10 else 0.0
-    return importeConRecargo - descuentoFrecuente
 }
 
 fun mostrarReporte(vehiculos: List<Vehiculo>) {
@@ -50,13 +47,26 @@ fun mostrarReporte(vehiculos: List<Vehiculo>) {
     for (v in vehiculos) {
         val tarifa = tarifaBase(v.tipo)
         val recargoPct = calcularRecargoPorcentaje(v.horas)
-        val importe = calcularImporte(v.tipo, v.horas, v.esFrecuente)
+        val importe = calcularImporte(v.tipo, v.horas)
         totalRecaudado += importe
 
         println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe")
     }
 
-    println("Total: S/ $totalRecaudado")
+    println("Subtotal: S/ $totalRecaudado")
+
+    val descuentoExtra = if (totalRecaudado > 500) totalRecaudado * 0.20 else 0.0
+    val subtotalConDescuento = totalRecaudado - descuentoExtra
+
+    if (totalRecaudado > 500) {
+        println("Descuento extra 20% (supera S/ 500): S/ $descuentoExtra")
+        println("Subtotal con descuento: S/ $subtotalConDescuento")
+    }
+
+    val igv = subtotalConDescuento * 0.18
+    val totalFinal = subtotalConDescuento + igv
+    println("IGV (18%): S/ $igv")
+    println("Total final: S/ $totalFinal")
 }
 
 fun main() {
@@ -90,10 +100,7 @@ fun main() {
             horas = 1
         }
 
-        print("Es cliente frecuente? (s/n): ")
-        val esFrecuente = readLine()?.lowercase() == "s"
-
-        vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
+        vehiculos.add(Vehiculo(placa, tipo, horas))
     }
     mostrarReporte(vehiculos)
 }
