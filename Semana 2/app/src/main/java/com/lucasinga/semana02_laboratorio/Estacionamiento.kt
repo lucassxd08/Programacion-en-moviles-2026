@@ -4,6 +4,7 @@ data class Vehiculo(
     val placa: String,
     val tipo: String,
     val horas: Int,
+    val esFrecuente: Boolean
 )
 
 fun tarifaBase(tipo: String): Double {
@@ -25,15 +26,17 @@ fun calcularRecargoPorcentaje(horas: Int): Int {
     }
 }
 
-fun calcularImporte(tipo: String, horas: Int): Double {
+fun calcularImporte(tipo: String, horas: Int, esFrecuente: Boolean): Double {
     val tarifa = tarifaBase(tipo)
     val importeNormal = tarifa * horas
-    return when {
+    val importeConRecargo = when {
         horas <= 2 -> importeNormal
         horas <= 5 -> importeNormal * 1.20
         horas <= 10 -> importeNormal * 1.40
         else -> importeNormal * 1.50
     }
+    val descuentoFrecuente = if (esFrecuente) importeConRecargo * 0.10 else 0.0
+    return importeConRecargo - descuentoFrecuente
 }
 
 fun mostrarReporte(vehiculos: List<Vehiculo>) {
@@ -47,7 +50,7 @@ fun mostrarReporte(vehiculos: List<Vehiculo>) {
     for (v in vehiculos) {
         val tarifa = tarifaBase(v.tipo)
         val recargoPct = calcularRecargoPorcentaje(v.horas)
-        val importe = calcularImporte(v.tipo, v.horas)
+        val importe = calcularImporte(v.tipo, v.horas, v.esFrecuente)
         totalRecaudado += importe
 
         println("${v.placa}  -  ${v.tipo}  -  ${v.horas}h  -  S/$tarifa  -  $recargoPct%  -  S/$importe")
@@ -100,7 +103,10 @@ fun main() {
             horas = 1
         }
 
-        vehiculos.add(Vehiculo(placa, tipo, horas))
+        print("Es cliente frecuente? (s/n): ")
+        val esFrecuente = readLine()?.lowercase() == "s"
+
+        vehiculos.add(Vehiculo(placa, tipo, horas, esFrecuente))
     }
     mostrarReporte(vehiculos)
 }
